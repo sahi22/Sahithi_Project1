@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/gridLayout01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:columnCount="8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/LinearLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:rowCount="10"
+        tools:ignore="SpeakableTextPresentCheck">
+    </androidx.gridlayout.widget.GridLayout>
+
+<!--        app:layout_constraintTop_toBottomOf="@+id/stopwatch"-->
+        <LinearLayout
+                android:id="@+id/LinearLayout"
+                android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/gridLayout01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/textView00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="2dp"
+            android:height="64dp"
+            android:width="64dp"
+            android:text="@string/flag"
+            android:textSize="32sp"
+            android:textAlignment="center"
+             />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            android:height="64dp"
+            android:width="64dp"
+            android:text="10"
+            android:textSize="32sp"
+            android:textAlignment="center"
+            />
+
+        <TextView
+            android:id="@+id/textView01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="2dp"
+            android:height="64dp"
+            android:width="64dp"
+            android:text="@string/clock"
+            android:textSize="32sp"
+            android:textAlignment="center"
+            />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="2dp"
+            android:width="64dp"
+            android:height="64dp"
+            android:text="11"
+            android:textSize="32sp"
+            android:textAlignment="center"
+             />
+
+        </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
