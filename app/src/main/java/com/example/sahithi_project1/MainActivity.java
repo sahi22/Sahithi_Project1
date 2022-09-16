@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 cells.add(cell);
                 //tv.setText(String.valueOf(i)+String.valueOf(j));
                 tv.setTextColor(Color.GRAY);
-                tv.setBackgroundColor(Color.GRAY);
+                tv.setBackgroundColor(Color.GREEN);
                 tv.setOnClickListener(this::onClickTV);
 
                 GridLayout.LayoutParams lp = (GridLayout.LayoutParams) tv.getLayoutParams();
@@ -137,28 +137,91 @@ public class MainActivity extends AppCompatActivity {
                 tv.setText("");
                 count++;
                 flagCount.setText(String.valueOf(count));
-
+                cells.get(n).setFlag();
             } else{
                 tv.setText(this.getString(R.string.flag));
                 count--;
                 flagCount.setText(String.valueOf(count));
                 cells.get(n).setFlag();
-
             }
-
-        }
-//        else {
+        } else { //if it's on the pickaxe and they click it, dot he BFS ere
 //            parameter of the bfs function would be the index of the cell, then call
-//        }
+
+          }
 
         if (tv.getCurrentTextColor() == Color.GRAY) {
             tv.setTextColor(Color.GREEN);
             tv.setBackgroundColor(Color.parseColor("lime"));
         }else {
             tv.setTextColor(Color.GRAY);
-            tv.setBackgroundColor(Color.LTGRAY);
+            tv.setBackgroundColor(Color.GREEN);
         }
     }
+
+    private void setAdjacentValues(int originalCell){
+        int i = originalCell/COLUMN_COUNT; //row
+        int j = originalCell%COLUMN_COUNT; //column
+
+        //left diagonal
+        int leftDiagonalRow = i - 1;
+        int leftDiagonalColumn = j - 1;
+        if (inBounds(leftDiagonalRow, leftDiagonalColumn)){
+            cells.get(leftDiagonalRow * COLUMN_COUNT + leftDiagonalColumn).incCount();
+        }
+
+        //right diagonal
+        int rightDiagonalRow = i - 1;
+        int rightDiagonalColumn = j + 1;
+        if (inBounds(rightDiagonalRow, rightDiagonalColumn)){
+            cells.get(rightDiagonalRow * COLUMN_COUNT + rightDiagonalColumn).incCount();
+        }
+
+        //top
+        int topRow = i -1;
+        int topColumn = j;
+        if (inBounds(topRow, topColumn)){
+            cells.get(topRow * COLUMN_COUNT + topColumn).incCount();
+        }
+
+        //direct left
+        int leftRow = i;
+        int leftColumn = j - 1;
+        if (inBounds(leftRow, leftColumn)){
+            cells.get(leftRow * COLUMN_COUNT + leftColumn).incCount();
+        }
+
+        //direct right
+        int rightRow = i + 1;
+        int rightColumn = j;
+        if (inBounds(rightRow, rightColumn)){
+            cells.get(rightRow * COLUMN_COUNT + rightColumn).incCount();
+        }
+
+        //bottom
+        int bottomRow = i + 1;
+        int bottomColumn = j;
+        if (inBounds(bottomRow, bottomColumn)){
+            cells.get(bottomRow * COLUMN_COUNT + bottomColumn).incCount();
+        }
+
+        //left bottom diagonal
+        int leftBotRow = i + 1;
+        int leftBotColumn = j - 1;
+        if (inBounds(leftBotRow, leftBotColumn)){
+            cells.get(leftBotRow * COLUMN_COUNT + leftBotColumn).incCount();
+        }
+
+        //right bottom diagonal
+        int rightBotRow = i + 1;
+        int rightBotColumn = j + 1;
+        if (inBounds(rightBotRow, rightBotColumn)){
+            cells.get(rightBotRow * COLUMN_COUNT + rightBotColumn).incCount();
+        }
+
+    }
+
+//    only push a neighbor if it's an adjacent cell
+//    if it's a mine, don't look at its neighbors
 
     public void placingMines(int numberMines){
         for(int i = 0; i <numberMines; i++) {
@@ -166,10 +229,23 @@ public class MainActivity extends AppCompatActivity {
             if (!cells.get(randNum).getMine()) {
                 cells.get(randNum).setMine();
                 minesList.add(randNum);
+                setAdjacentValues(randNum);
             } else {
                 i--;
             }
         }
+    }
+
+    public boolean inBounds(int row, int col) {
+        if ( (row < 0) || (row > 10)) {
+            return false;
+        }
+
+        if( (col > COLUMN_COUNT) || (col < 0)) {
+            return false;
+        }
+
+        return true;
     }
 }
 
