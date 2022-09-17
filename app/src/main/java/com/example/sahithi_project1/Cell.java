@@ -1,9 +1,39 @@
 package com.example.sahithi_project1;
 
 public class Cell {
-    private boolean hasFlag = false;
-    private boolean hasMine = false;
-    private int mineCount = 0;
+    private boolean hasFlag;
+    private boolean hasMine;
+    private int mineCount;
+    private boolean visited;
+    private int number;
+
+    public Cell() {
+        hasFlag = false;
+        hasMine = false;
+        mineCount = 0;
+        visited = false;
+    }
+
+    public Cell(int n) {
+        hasFlag = false;
+        hasMine = false;
+        mineCount = 0;
+        visited = false;
+        number = n;
+
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public boolean getVisited() {
+        return visited;
+    }
+
+    public void setVisited() {
+        visited = true;
+    }
 
     public int getCount() {
         return mineCount;
