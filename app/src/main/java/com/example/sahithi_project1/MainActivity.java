@@ -171,30 +171,33 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
 
             } else {
-                tv.setBackgroundColor(Color.GRAY);
-                ++revealed;
+//                tv.setBackgroundColor(Color.GRAY);
+//                ++revealed;
+//                tv.setText(Integer.toString(cells.get(n).getCount()));
+//                tv.setTextColor(Color.GREEN);
                 Queue<Cell> queue = new LinkedList<>();
 //                cell_tvs.get(n).setBackgroundColor(Color.GRAY);
 
                 queue.add(cells.get(n));
-                cells.get(n).setVisited();
+//                cells.get(n).setVisited();
 
                 boolean noMine = true;
                 while(queue.size() > 0 && noMine ) {
+                    if (noMine == false) {
+                        break;
+                    }
                     Cell curr_cell = queue.remove();
                     int row = curr_cell.getNumber()/COLUMN_COUNT; //row
                     int col = curr_cell.getNumber()%COLUMN_COUNT;
-                    for (int k = row-1; k < row+2; ++k) {
-                        for (int l = col-1; l < col + 2; ++l) {
-                            int curr_idx = k * COLUMN_COUNT + l;
-                            if (k == row && l == col) {
-                                continue;
-                            }
-                            else if (inBounds(k, l) && cells.get(curr_idx).getMine()) {
+                            int curr_idx = row * COLUMN_COUNT + col;
+//                            if (k == row && l == col) {
+//                                continue;
+//                            }
+                            if (inBounds(row, col) && cells.get(curr_idx).getMine()) {
                                 noMine = false;
 //                                k = row + 2;
 //                                break;
-                            } else if (inBounds(k, l) && cells.get(curr_idx).getCount() > 0
+                            } else if (inBounds(row, col) && cells.get(curr_idx).getCount() > 0
                                     && cells.get(curr_idx).getVisited() == false) {
                                 cell_tvs.get(curr_idx).setBackgroundColor(Color.GRAY);
                                 cell_tvs.get(curr_idx).setText(Integer.toString(cells.get(curr_idx).getCount()));
@@ -203,16 +206,23 @@ public class MainActivity extends AppCompatActivity {
                                 ++revealed;
                                 continue;
                             }
-                            else if (inBounds(k, l) && cells.get(curr_idx).getVisited() == false) {
+                            else if (inBounds(row, col) && cells.get(curr_idx).getVisited() == false) {
+                                for (int k = row-1; k < row+2; ++k) {
+                                    for (int l = col - 1; l < col + 2; ++l) {
+                                        if(inBounds(k, l)) {
+                                            queue.add(cells.get(k * COLUMN_COUNT + l));
+                                        }
+                                    }
+                                }
                                 ++revealed;
-                                queue.add(cells.get(curr_idx));
+//                                queue.add(cells.get(curr_idx));
                                 cells.get(curr_idx).setVisited();
                                 cell_tvs.get(curr_idx).setBackgroundColor(Color.GRAY);
                             }
                             System.out.println(revealed);
                         }
-                    }
-                }
+//                    }
+//                }
             }
             if (revealed >= 76) {
                 for (int i = 0; i < minesList.size(); i++) {
