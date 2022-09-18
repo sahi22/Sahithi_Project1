@@ -144,30 +144,34 @@ public class MainActivity extends AppCompatActivity {
         int n = findIndexOfCellTextView(tv);
         int count = Integer.parseInt(flagCount.getText().toString());
 //        tv.setText(String.valueOf(n));
+//        if it's in the flag mode, then place the flag on unrevealed cells
         if(flagPick.getText().equals(getString(R.string.flag))){
-            if (cells.get(n).getFlag()) {
-                tv.setText("");
-                count++;
-                flagCount.setText(String.valueOf(count));
-                cells.get(n).setFlag();
-            } else{
-                tv.setText(this.getString(R.string.flag));
-                count--;
-                flagCount.setText(String.valueOf(count));
-                cells.get(n).setFlag();
+            if (!cells.get(n).getVisited()) {
+                if (cells.get(n).getFlag()) {
+                    tv.setText("");
+                    count++;
+                    flagCount.setText(String.valueOf(count));
+                    cells.get(n).setFlag();
+                } else {
+                    tv.setText(this.getString(R.string.flag));
+                    count--;
+                    flagCount.setText(String.valueOf(count));
+                    cells.get(n).setFlag();
+                }
             }
         } else { //if it's on the pickaxe and they click it, dot he BFS ere
 //            parameter of the bfs function would be the index of the cell, then call
+
             if (cells.get(n).getMine()) {
 //               if they click on a cell with a mine, reveal all the mines
                 for (int i = 0; i < minesList.size(); i++) {
                     tv.setText(this.getString(R.string.mine));
                 }
 
+//                game ends, they lose
                 Intent intent = new Intent(this, ResultsActivity.class);
-                intent.putExtra("com.example.sahithi_project1.won", true);
+                intent.putExtra("com.example.sahithi_project1.won", false);
                 intent.putExtra("com.example.sahithi_project1.clock", clock);
-
                 startActivity(intent);
 
             } else {
