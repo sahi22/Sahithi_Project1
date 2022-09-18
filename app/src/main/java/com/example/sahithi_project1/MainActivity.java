@@ -188,6 +188,9 @@ public class MainActivity extends AppCompatActivity {
                     int row = curr_cell.getNumber()/COLUMN_COUNT; //row
                     int col = curr_cell.getNumber()%COLUMN_COUNT;
                             int curr_idx = row * COLUMN_COUNT + col;
+                            if (inBounds(row, col) && cells.get(curr_idx).getFlag()) {
+                                continue;
+                            }
                             if (inBounds(row, col) && cells.get(curr_idx).getMine()) {
                                 noMine = false;
                             } else if (inBounds(row, col) && cells.get(curr_idx).getCount() > 0
