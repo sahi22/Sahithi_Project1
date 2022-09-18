@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     TextView flagCount;
     private int revealed;
     private boolean gameStatus = false;
+    private boolean gameLost = false;
 
 //    private int dpToPixel(int dp) {
 //        float density = Resources.getSystem().getDisplayMetrics().density;
@@ -101,8 +102,6 @@ public class MainActivity extends AppCompatActivity {
         handler.post(new Runnable() {
             @Override
             public void run() {
-//                int hours = clock/3600;
-//                int minutes = (clock%3600) / 60;
                 String time = String.format("%02d", clock);
                 timeView.setText(time);
 
@@ -121,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
         }else {
             flagPick.setText(R.string.pick);
         }
-
     }
 
     private int findIndexOfCellTextView(TextView tv) {
@@ -140,10 +138,17 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             return;
         }
+
+        if (gameLost == true) {
+            Intent intent = new Intent(this, ResultsActivity.class);
+            intent.putExtra("com.example.sahithi_project1.won", false);
+            intent.putExtra("com.example.sahithi_project1.clock", clock);
+            startActivity(intent);
+            return;
+        }
         TextView tv = (TextView) view;
         int n = findIndexOfCellTextView(tv);
         int count = Integer.parseInt(flagCount.getText().toString());
-//        tv.setText(String.valueOf(n));
 //        if it's in the flag mode, then place the flag on unrevealed cells
         if(flagPick.getText().equals(getString(R.string.flag))){
             if (!cells.get(n).getVisited()) {
@@ -159,31 +164,20 @@ public class MainActivity extends AppCompatActivity {
                     cells.get(n).setFlag();
                 }
             }
-        } else { //if it's on the pickaxe and they click it, dot he BFS ere
-//            parameter of the bfs function would be the index of the cell, then call
-
+        } else { //if it's on the pickaxe and they click it, do BFS or end game
+            //if they click on a mine
             if (cells.get(n).getMine()) {
-//               if they click on a cell with a mine, reveal all the mines
+//               if they click on a cell with a mine, reveal all the mines and trigger game end
                 for (int i = 0; i < minesList.size(); i++) {
-                    tv.setText(this.getString(R.string.mine));
+                    cell_tvs.get(minesList.get(i)).setText(getString(R.string.mine));
                 }
-
-//                game ends, they lose
-                Intent intent = new Intent(this, ResultsActivity.class);
-                intent.putExtra("com.example.sahithi_project1.won", false);
-                intent.putExtra("com.example.sahithi_project1.clock", clock);
-                startActivity(intent);
-
+                gameLost = true;
+                running = false;
+                return;
             } else {
-//                tv.setBackgroundColor(Color.GRAY);
-//                ++revealed;
-//                tv.setText(Integer.toString(cells.get(n).getCount()));
-//                tv.setTextColor(Color.GREEN);
                 Queue<Cell> queue = new LinkedList<>();
-//                cell_tvs.get(n).setBackgroundColor(Color.GRAY);
 
                 queue.add(cells.get(n));
-//                cells.get(n).setVisited();
 
                 boolean noMine = true;
                 while(queue.size() > 0 && noMine ) {
@@ -194,13 +188,8 @@ public class MainActivity extends AppCompatActivity {
                     int row = curr_cell.getNumber()/COLUMN_COUNT; //row
                     int col = curr_cell.getNumber()%COLUMN_COUNT;
                             int curr_idx = row * COLUMN_COUNT + col;
-//                            if (k == row && l == col) {
-//                                continue;
-//                            }
                             if (inBounds(row, col) && cells.get(curr_idx).getMine()) {
                                 noMine = false;
-//                                k = row + 2;
-//                                break;
                             } else if (inBounds(row, col) && cells.get(curr_idx).getCount() > 0
                                     && cells.get(curr_idx).getVisited() == false) {
                                 cell_tvs.get(curr_idx).setBackgroundColor(Color.GRAY);
@@ -219,23 +208,19 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 }
                                 ++revealed;
-//                                queue.add(cells.get(curr_idx));
                                 cells.get(curr_idx).setVisited();
                                 cell_tvs.get(curr_idx).setBackgroundColor(Color.GRAY);
                             }
                             System.out.println(revealed);
                         }
-//                    }
-//                }
             }
             if (revealed >= 76) {
                 for (int i = 0; i < minesList.size(); i++) {
-                    cell_tvs.get(minesList.get(i)).setBackgroundColor(Color.BLUE);
+//                    cell_tvs.get(minesList.get(i)).setBackgroundColor(Color.BLUE);
                     cell_tvs.get(minesList.get(i)).setText(this.getString(R.string.mine));
                 }
                 gameStatus = false;
                 running = false;
-
             }
           }
     }
@@ -251,9 +236,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if  (inBounds(row, col) && !cells.get(row * COLUMN_COUNT + col).getMine()) {
                     cells.get(row * COLUMN_COUNT + col).incCount();
-                    cell_tvs.get(row * COLUMN_COUNT + col).setText(Integer.toString(cells.get(row * COLUMN_COUNT + col).getCount()));
-
-
+//                    cell_tvs.get(row * COLUMN_COUNT + col).setText(Integer.toString(cells.get(row * COLUMN_COUNT + col).getCount()));
                 }
             }
         }
@@ -269,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
             if (!cells.get(randNum).getMine()) {
                 cells.get(randNum).setMine();
                 minesList.add(randNum);
-                cell_tvs.get(randNum).setText(getString(R.string.mine));
+//                cell_tvs.get(randNum).setText(getString(R.string.mine));
                 setAdjacentValues(randNum);
             } else {
                 i--;
